@@ -167,7 +167,7 @@ class Plots:
         plt.show()        
 
 
-    def plot_changePoint_with_event(self, data:pd.DataFrame, text: bool):
+    def plot_changePoint_with_event(self, data:pd.DataFrame):
         '''
         This function is used to plot Change point with evetns
 
@@ -194,22 +194,39 @@ class Plots:
             '2022-01-03': 'Geopolitical tensions over Ukraine',
         }        
 
-        plt.figure(figsize=(14, 7))
+        fig, axs = plt.subplots(2, 1, figsize=(18, 15))
+
+        # Plot with events
+        plt.sca(axs[1])
         plt.plot(data.index, data['Price'], label='Brent Oil Price', color='blue')
-        plt.title('Brent Oil Prices Over Time')
+        plt.title('Brent Oil Prices Over Time with event')
         plt.xlabel('Date')
         plt.ylabel('Price (USD per Barrel)')
         plt.legend()
         plt.grid()
 
-        # Annotate each major event on the plot
+
         for date, event in event_data.items():
             event_date = pd.to_datetime(date)
             if event_date in data.index:
                 price = data.loc[event_date, 'Price']
                 plt.axvline(event_date, color='red', linestyle='--', alpha=0.6)
-                if text:
-                    plt.text(event_date, price, event, rotation=90, verticalalignment='center', fontsize=8, color='black', fontweight = 'bold')
-                
+                plt.text(event_date, price, event, rotation=90, verticalalignment='center', fontsize=8, color='black', fontweight='bold')
 
+        # Plot without events
+        plt.sca(axs[0])
+        plt.plot(data.index, data['Price'], label='Brent Oil Price', color='blue')
+        plt.title('Brent Oil Prices Over Time without event')
+        plt.xlabel('Date')
+        plt.ylabel('Price (USD per Barrel)')
+        plt.legend()
+        plt.grid()
+
+
+        for date, event in event_data.items():
+            event_date = pd.to_datetime(date)
+            if event_date in data.index:
+                plt.axvline(event_date, color='red', linestyle='--', alpha=0.6)
+
+        plt.tight_layout()  
         plt.show()
