@@ -1,4 +1,5 @@
 import pandas as pd
+from pandas.plotting import lag_plot
 import matplotlib.pyplot as plt
 import seaborn as sns
 import ruptures as rpt
@@ -75,3 +76,33 @@ class Plots:
         plt.legend()
         plt.show()            
 
+
+    def plot_distribution(self, price):
+        '''
+        Function to plot the distrution of price
+
+        Parameter:
+        ---------
+            Price(pd.Dataframe): price data
+        '''
+        sns.set_style("whitegrid")  
+        sns.set_palette("pastel")    
+
+        plt.figure(figsize=(15, 5))
+
+        sns.histplot(data=price, x='Price', kde=True, bins=30, color='skyblue', alpha=0.7)
+
+        plt.title('Distribution of Price', fontsize=18, fontweight='bold')
+        plt.xlabel('Price', fontsize=14)
+        plt.ylabel('Frequency', fontsize=14)
+
+
+        plt.xlim(price['Price'].min(), price['Price'].max())  
+        plt.ylim(0, 1800)  
+
+        plt.grid(axis='y', linestyle='--', alpha=0.7)
+
+        plt.tight_layout()
+        plt.show()        
+
+     
