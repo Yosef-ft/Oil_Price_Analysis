@@ -156,3 +156,26 @@ class DataUtils:
         except Exception as e:
             logger.error(f"Error in adding holiday column: {e}")
             return data
+        
+
+    def add_features(self, data):
+        '''
+        Funtion used to add features
+
+        Parameter:
+        ---------
+            data(pd.DataFrmae)
+        '''
+        data['SMA_week'] = data['Price'].rolling(window=7).mean()  
+        data['SMA_month'] = data['Price'].rolling(window=30).mean()  
+        data['SMA_quarter'] = data['Price'].rolling(window=90).mean()  
+        data['SMA_semi_yearly'] = data['Price'].rolling(window=180).mean()  
+        data['SMA_yearly'] = data['Price'].rolling(window=360).mean()  
+
+        data['std_week'] = data['Price'].rolling(window=7).std()  
+        data['std_month'] = data['Price'].rolling(window=30).std()  
+        data['std_quarter'] = data['Price'].rolling(window=90).std()  
+        data['std_semi_yearly'] = data['Price'].rolling(window=180).std() 
+        data['std_yearly'] =data['Price'].rolling(window=360).std()  
+
+        return data        
