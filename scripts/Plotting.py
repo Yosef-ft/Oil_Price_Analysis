@@ -60,9 +60,17 @@ class Plots:
         plt.show()         
 
 
-    def plot_changePoint(self, price):
+    def plot_changePoint(self, price, model:str):
+        '''
+        The model is used to plot changePoint
+
+        Parameter:
+        ---------
+            price(pd.DataFrame)
+            model(str): rbf, l1, l2
+        '''
         price_array = price['Price'].values
-        model = "rbf"
+        model = model
         algo = rpt.Pelt(model=model).fit(price_array)
         change_points = algo.predict(pen=20)
 
@@ -73,6 +81,7 @@ class Plots:
         plt.xlabel('Date')
         plt.ylabel('Price (USD)')
         plt.title('Brent Oil Prices with Detected Change Points')
+        plt.grid()
         plt.legend()
         plt.show()            
 
@@ -156,3 +165,51 @@ class Plots:
             plt.legend(title='Standard deviation Moving Averages')
                     
         plt.show()        
+
+
+    def plot_changePoint_with_event(self, data:pd.DataFrame, text: bool):
+        '''
+        This function is used to plot Change point with evetns
+
+        data(pd.DataFrame)
+        text(bool): to show the events on the plot
+        '''
+        event_data = {
+            '1999-10-01': 'OPEC production cuts take effect',
+            '2004-07-01': 'Hurricane Ivan impacts U.S. production',
+            '2005-08-01': 'Hurricane Katrina causes severe supply disruptions',
+            '2007-05-01': "OPEC’s output policies influence prices",
+            '2008-04-01': 'Global financial crisis begins affecting demand',
+            '2008-10-01': 'Economic downturn leads to reduced demand',
+            '2009-04-01': 'Early signs of economic recovery',
+            '2011-01-03': 'Political unrest in the Middle East (Arab Spring)',
+            '2014-10-01': 'OPEC decides not to cut production',
+            '2015-01-02': 'Oil price crash due to oversupply',
+            '2015-10-01': 'Global economic concerns affect demand',
+            '2017-07-03': 'Increased U.S. inventories impact prices',
+            # '2018-01-02': 'Strong global economic growth boosts demand',
+            '2020-04-01': 'COVID-19 pandemic leads to historic price drop',
+            '2020-07-01': 'Recovery in demand as economies reopen',
+            '2021-01-04': 'Vaccine rollout boosts global economic outlook',
+            '2022-01-03': 'Geopolitical tensions over Ukraine',
+        }        
+
+        plt.figure(figsize=(14, 7))
+        plt.plot(data.index, data['Price'], label='Brent Oil Price', color='blue')
+        plt.title('Brent Oil Prices Over Time')
+        plt.xlabel('Date')
+        plt.ylabel('Price (USD per Barrel)')
+        plt.legend()
+        plt.grid()
+
+        # Annotate each major event on the plot
+        for date, event in event_data.items():
+            event_date = pd.to_datetime(date)
+            if event_date in data.index:
+                price = data.loc[event_date, 'Price']
+                plt.axvline(event_date, color='red', linestyle='--', alpha=0.6)
+                if text:
+                    plt.text(event_date, price, event, rotation=90, verticalalignment='center', fontsize=8, color='black', fontweight = 'bold')
+                
+
+        plt.show()
