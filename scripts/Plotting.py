@@ -105,4 +105,23 @@ class Plots:
         plt.tight_layout()
         plt.show()        
 
-     
+
+    def lag_plot(self, price_data: pd.DataFrame, period: int):
+        '''
+        Function to plot lag
+
+        Paramter:
+        --------
+            price_data(pd.DataFrmae)
+            period(int): lag period
+        '''
+        # Plot lag plot
+        plt.figure(figsize=(8, 8))
+        lag_plot(price_data['Price'], lag=period)
+        plt.title(f'Lag Plot (Lag={period})')
+        plt.xlabel('Price(t)')
+        plt.ylabel('Price(t-1)')
+        plt.grid()
+        plt.show()  
+
+
