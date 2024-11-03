@@ -125,3 +125,34 @@ class Plots:
         plt.show()  
 
 
+    def plot_ma(self, price: pd.DataFrame, sma: bool):
+        '''
+        Function to plot moving average and the std
+
+        Parameter:
+        ---------
+            price(pd.DataFrame)
+            sma(bool): if sma is true it plot the sma and if false it plots the STD 
+        '''
+        plt.figure(figsize=(14, 7))
+        if sma:
+            sns.lineplot(x=price.index, y='SMA_week', data=price, label='SMA Week')
+            sns.lineplot(x=price.index, y='SMA_month', data=price, label='SMA Month')
+            sns.lineplot(x=price.index, y='SMA_yearly', data=price, label='SMA Yearly')
+
+            plt.xlabel('Date')
+            plt.ylabel('Price (USD)')
+            plt.title('Brent Oil Prices and SMAs Over Time')
+            plt.legend(title='Simple Moving Averages')
+
+        else:
+            sns.lineplot(x=price.index, y='std_week', data=price, label='STD Week')
+            sns.lineplot(x=price.index, y='std_month', data=price, label='STD Month')
+            sns.lineplot(x=price.index, y='std_yearly', data=price, label='STD Yearly')
+
+            plt.xlabel('Date')
+            plt.ylabel('Price (USD)')
+            plt.title('Brent Oil Prices and STD Over Time')
+            plt.legend(title='Standard deviation Moving Averages')
+                    
+        plt.show()        
