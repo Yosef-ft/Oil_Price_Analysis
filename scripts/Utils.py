@@ -1,5 +1,6 @@
 import os
 import logging
+from datetime import datetime
 
 import pandas as pd
 import numpy as np
@@ -179,3 +180,21 @@ class DataUtils:
         data['std_yearly'] =data['Price'].rolling(window=360).std()  
 
         return data        
+    
+
+    def convert_date_event(self, date_str):
+        input_format = "%b%d.%Y"
+        parsed_date = datetime.strptime(date_str, input_format)
+        output_format = "%b %d, %Y"
+        return parsed_date.strftime(output_format)    
+    
+
+    def convert_date_price(self, date_str):
+        try:
+            input_format = "%d-%b-%y"
+            parsed_date = datetime.strptime(date_str, input_format)
+        except:
+            parsed_date = datetime.strptime(date_str, "%b %d, %Y")
+                
+        output_format = "%b %d, %Y"
+        return parsed_date.strftime(output_format)
