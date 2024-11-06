@@ -4,3 +4,11 @@
 __pycache__
 
 logs
+
+CV_arima
+
+mlruns
+
+mlartifacts
+
+report
