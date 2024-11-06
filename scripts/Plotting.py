@@ -230,3 +230,50 @@ class Plots:
 
         plt.tight_layout()  
         plt.show()
+
+
+    def compare_indicator_price(self, event: pd.DataFrame, price_with_indicators,year =2012, full_year = False):
+
+        event_data = price_with_indicators.loc[price_with_indicators['title'] == event] 
+
+        if full_year:
+            event_data = event_data.loc[event_data['Date'].dt.year >= year]  
+        
+        else:
+            event_data = event_data.loc[event_data['Date'].dt.year == year]   
+            
+        # unemplyment, cpi
+        event_data.loc[:, 'actual'] = event_data['actual'].apply(lambda x: x.replace("%", ''))
+        event_data.loc[:, 'forecast'] = event_data['forecast'].apply(lambda x: x.replace("%", ''))
+        event_data.loc[:, 'previous'] = event_data['previous'].apply(lambda x: x.replace("%", ''))  
+
+        # storage
+        event_data.loc[:, 'actual'] = event_data['actual'].apply(lambda x: x.replace("B", ''))
+        event_data.loc[:, 'forecast'] = event_data['forecast'].apply(lambda x: x.replace("B", ''))
+        event_data.loc[:, 'previous'] = event_data['previous'].apply(lambda x: x.replace("B", ''))      
+
+        # inventory
+        event_data.loc[:, 'actual'] = event_data['actual'].apply(lambda x: x.replace("M", ''))
+        event_data.loc[:, 'forecast'] = event_data['forecast'].apply(lambda x: x.replace("M", ''))
+        event_data.loc[:, 'previous'] = event_data['previous'].apply(lambda x: x.replace("M", ''))
+    
+
+        event_data.set_index('Date', inplace=True)    
+
+        fig, ax1 = plt.subplots(figsize=(10, 8))
+        event_data['actual'] = event_data['actual'].astype(float)
+        sns.lineplot(data=event_data, x=event_data.index, y='actual', ax=ax1, color="b")
+        ax1.set_ylabel(event, color="b")
+        ax1.tick_params(axis='y', labelcolor="b")
+
+        # Create a second y-axis sharing the same x-axis for 'Price'
+        ax2 = ax1.twinx()
+        sns.lineplot(data=event_data, x=event_data.index, y='Price', ax=ax2, color="r")
+        ax2.set_ylabel('Price', color="r")
+        ax2.tick_params(axis='y', labelcolor="r")
+
+        # Add titles and labels
+        ax1.set_xlabel("Date")
+        plt.title(f"{event} vs Price Over Time")
+
+        plt.show()          
