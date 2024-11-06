@@ -92,7 +92,7 @@ class ModelUtils:
             model1.compile(
                 loss=MeanSquaredError(),
                 optimizer=Adam(learning_rate=0.01),
-                metrics=[MeanAbsoluteError()]
+                metrics=[MeanAbsoluteError(), RootMeanSquaredError(), MeanAbsoluteError()]
             )
 
         start_time = time.time()
