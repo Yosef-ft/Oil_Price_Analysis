@@ -267,7 +267,7 @@ class Timeseries:
             X.reset_index()[target],
             exog=exog_x if add_exog else None,
             order=(p, d, q),
-            seasonal_order=(1,1,1,360)
+            seasonal_order=(1,1,1,7)
         )
         fitted_model = model.fit(maxiter=300, disp=False)
 
@@ -420,7 +420,7 @@ class Timeseries:
         fig = df_true_pred.plot(figsize=(12, 6), lw=3, color=['k', 'r'])
         plt.legend(('True', 'Predicted'))
         plt.ylabel('Price ($)')
-        plt.title(f'WTI crude oil price prediction using ARIMA for {n_outputs} days.')
+        plt.title(f'Brent oil price prediction using ARIMA for {n_outputs} days.')
         plt.savefig(f'{folder}/compare.png')
         
         # Compute actual metrics based on data in actual units
