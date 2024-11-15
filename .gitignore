@@ -12,3 +12,7 @@ mlruns
 mlartifacts
 
 report
+
+.idea
+
+models
