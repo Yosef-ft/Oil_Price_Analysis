@@ -1,0 +1,58 @@
+stages:
+  data_stage:
+    cmd: python src/data/data_stage.py --config=params.yaml  
+    deps:
+    - src/data/data_stage.py
+    params: 
+    - base
+    - data
+    - output
+    outs: 
+    - data/train_data.csv
+    - data/test_data.csv
+  
+  feature_stage:
+    cmd: python src/features/featurize.py --config=params.yaml
+    deps:
+    - src/features/featurize.py
+    - data/train_data.csv
+    - data/test_data.csv
+    params:
+    - data  
+
+  train_stage:
+    cmd: python src/train/train_model.py --config=params.yaml  
+    deps:
+    - src/train/train_model.py
+    params:
+    - training
+    - model
+    - data
+    - report
+    outs:
+    - models/LSTM.keras
+    - data/history_df.csv
+
+  evaluate_stage:
+    cmd: python src/evaluate/evaluate.py --config=params.yaml  
+    deps:
+    - src/evaluate/evaluate.py
+    - models/LSTM.keras
+    params:
+    - report
+    - output
+    outs:
+    - reports/metrics.json
+
+  report_stage:
+    cmd: python src/reports/visualize.py --config=params.yaml 
+    deps:
+    - src/reports/visualize.py
+    - data/history_df.csv
+    params:
+    - report
+    outs:
+    - reports/loss.png
+    - reports/mean_squared_error.png
+    - reports/mean_absolute_error.png
+    - reports/root_mean_squared_error.png
