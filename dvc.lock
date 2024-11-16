@@ -33,3 +33,27 @@ stages:
       hash: md5
       md5: 4a7ec7a1d149c71f7f02958d1feaa20b
       size: 154921
+  feature_stage:
+    cmd: python src/features/featurize.py --config=params.yaml
+    deps:
+    - path: data/test_data.csv
+      hash: md5
+      md5: 0a9b2b371a67611413e899f842305498
+      size: 1330
+    - path: data/train_data.csv
+      hash: md5
+      md5: 4a7ec7a1d149c71f7f02958d1feaa20b
+      size: 154921
+    - path: src/features/featurize.py
+      hash: md5
+      md5: 98928c2bb8978b9934982f74f9610785
+      size: 2168
+    params:
+      params.yaml:
+        data:
+          dataset_csv: data/BrentOilPrices.csv
+          train_split: data/train_data.csv
+          test_split: data/test_data.csv
+          history_df: data/history_df.csv
+          test_size: 60
+          time_steps: 30
