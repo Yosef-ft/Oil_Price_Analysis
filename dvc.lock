@@ -1,0 +1,35 @@
+schema: '2.0'
+stages:
+  data_stage:
+    cmd: python src/data/data_stage.py --config=params.yaml
+    deps:
+    - path: src/data/data_stage.py
+      hash: md5
+      md5: ab4b32124d6b39077875a3a40348bd97
+      size: 1781
+    params:
+      params.yaml:
+        base:
+          random_state: 42
+          verbose: 1
+          batch_size: 32
+          epochs: 1
+        data:
+          dataset_csv: data/BrentOilPrices.csv
+          train_split: data/train_data.csv
+          test_split: data/test_data.csv
+          history_df: data/history_df.csv
+          test_size: 60
+          time_steps: 30
+        output:
+          report_dir: reports
+          model_dir: models
+    outs:
+    - path: data/test_data.csv
+      hash: md5
+      md5: 0a9b2b371a67611413e899f842305498
+      size: 1330
+    - path: data/train_data.csv
+      hash: md5
+      md5: 4a7ec7a1d149c71f7f02958d1feaa20b
+      size: 154921
