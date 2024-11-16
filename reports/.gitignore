@@ -1,1 +1,5 @@
 /metrics.json
+/loss.png
+/mean_squared_error.png
+/mean_absolute_error.png
+/root_mean_squared_error.png
