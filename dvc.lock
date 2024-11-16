@@ -11,9 +11,9 @@ stages:
       params.yaml:
         base:
           random_state: 42
-          verbose: 1
+          verbose: 0
           batch_size: 32
-          epochs: 1
+          epochs: 10
         data:
           dataset_csv: data/BrentOilPrices.csv
           train_split: data/train_data.csv
@@ -66,6 +66,11 @@ stages:
       size: 5481
     params:
       params.yaml:
+        base:
+          random_state: 42
+          verbose: 0
+          batch_size: 32
+          epochs: 10
         data:
           dataset_csv: data/BrentOilPrices.csv
           train_split: data/train_data.csv
@@ -112,18 +117,18 @@ stages:
     outs:
     - path: data/history_df.csv
       hash: md5
-      md5: 6e8dfb5f4dc00fc6b251b27d5ccc0415
-      size: 260
+      md5: c94f0ae263ecaf66ad67c1041a262197
+      size: 1673
     - path: models/LSTM.keras
       hash: md5
-      md5: 0337a0cde1bd841d314abfb0773c5938
+      md5: a240bdb337ef198be5b8a81cbf934b0d
       size: 238140
   evaluate_stage:
     cmd: python src/evaluate/evaluate.py --config=params.yaml
     deps:
     - path: models/LSTM.keras
       hash: md5
-      md5: 0337a0cde1bd841d314abfb0773c5938
+      md5: a240bdb337ef198be5b8a81cbf934b0d
       size: 238140
     - path: src/evaluate/evaluate.py
       hash: md5
@@ -131,6 +136,11 @@ stages:
       size: 1762
     params:
       params.yaml:
+        base:
+          random_state: 42
+          verbose: 0
+          batch_size: 32
+          epochs: 10
         output:
           report_dir: reports
           model_dir: models
@@ -144,21 +154,26 @@ stages:
     outs:
     - path: reports/metrics.json
       hash: md5
-      md5: c7db50e7125ab27bae81f1d5ed82dde7
-      size: 105
+      md5: 152d3e1568a159d92a877997c900f08b
+      size: 104
   report_stage:
     cmd: python src/reports/visualize.py --config=params.yaml
     deps:
     - path: data/history_df.csv
       hash: md5
-      md5: 6e8dfb5f4dc00fc6b251b27d5ccc0415
-      size: 260
+      md5: c94f0ae263ecaf66ad67c1041a262197
+      size: 1673
     - path: src/reports/visualize.py
       hash: md5
       md5: ae7f780c4d8776d0049ac518ea573c3d
       size: 1409
     params:
       params.yaml:
+        base:
+          random_state: 42
+          verbose: 0
+          batch_size: 32
+          epochs: 10
         report:
           model_path: models/LSTM.keras
           metrics_file: reports/metrics.json
@@ -169,17 +184,17 @@ stages:
     outs:
     - path: reports/loss.png
       hash: md5
-      md5: 05209a4d5ecf1a49e3658c69bc9ef47f
-      size: 22009
+      md5: 2e89893a9efc4e3864dc889df3e10504
+      size: 43013
     - path: reports/mean_absolute_error.png
       hash: md5
-      md5: 9d28849d561df85f1b16ad562c4e62cf
-      size: 22406
+      md5: 7d89dff0ec748873da35a30fce9d5a62
+      size: 39337
     - path: reports/mean_squared_error.png
       hash: md5
-      md5: 268c22856aada8696f9e4a24e622dc12
-      size: 21799
+      md5: 9c18a9554b6d29406333b7c30d4a6aa8
+      size: 42813
     - path: reports/root_mean_squared_error.png
       hash: md5
-      md5: 8dcfa4f29867d084a5b0f09c603652d3
-      size: 29803
+      md5: 17d8663ad1ca6c47c8daaab0176fb9a8
+      size: 49799

@@ -25,6 +25,7 @@ stages:
     deps:
     - src/train/train_model.py
     params:
+    - base
     - training
     - model
     - data
@@ -39,6 +40,7 @@ stages:
     - src/evaluate/evaluate.py
     - models/LSTM.keras
     params:
+    - base
     - report
     - output
     outs:
@@ -51,6 +53,7 @@ stages:
     - data/history_df.csv
     params:
     - report
+    - base
     outs:
     - reports/loss.png
     - reports/mean_squared_error.png
