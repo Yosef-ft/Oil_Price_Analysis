@@ -1,13 +1,16 @@
 base:
   random_state: 42
-  verbose: 1
+  verbose: 0
   batch_size: 32
-  epochs: 10  
+  epochs: 10
 
 
 data:
   # loading data
   dataset_csv : 'data/BrentOilPrices.csv'
+  train_split: 'data/train_data.csv'
+  test_split: 'data/test_data.csv'
+  history_df: 'data/history_df.csv'
   test_size: 60
   time_steps: 30
 
@@ -34,13 +37,13 @@ model:
 
 training:
   # Training LSTM model
-  loss: MeanSquaredError
+  loss: mse
   optimizer: Adam
   learning_rate: 0.01
   metrics:
-    - MeanAbsoluteError
-    - MeanSquaredError
-    - RootMeanSquaredError
+      - mae
+      - mse
+      - RootMeanSquaredError
 
   early_stopping:
     monitor: val_loss
@@ -60,8 +63,8 @@ report:
   # metrics, images
 
   model_path: 'models/LSTM.keras'
-  metircs_file: 'reports/metrics.json'
+  metrics_file: 'reports/metrics.json'
   metrics_loss: 'reports/loss.png'
   metrics_mse: 'reports/mean_squared_error.png'
   metrics_mae: 'reports/mean_absolute_error.png'
-  metrics_rmse: 'reports/root_mean_squared_error.png'
+  metrics_RootMeanSquaredError: 'reports/root_mean_squared_error.png'
