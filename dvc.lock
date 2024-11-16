@@ -57,3 +57,64 @@ stages:
           history_df: data/history_df.csv
           test_size: 60
           time_steps: 30
+  train_stage:
+    cmd: python src/train/train_model.py --config=params.yaml
+    deps:
+    - path: src/train/train_model.py
+      hash: md5
+      md5: 34b7102c4730322c63e26e8dccc0473f
+      size: 5481
+    params:
+      params.yaml:
+        data:
+          dataset_csv: data/BrentOilPrices.csv
+          train_split: data/train_data.csv
+          test_split: data/test_data.csv
+          history_df: data/history_df.csv
+          test_size: 60
+          time_steps: 30
+        model:
+          layers:
+          - name: InputLayer
+            shape:
+            - 30
+            - 1
+          - name: LSTM
+            units: 64
+            activation: tanh
+            return_sequences: false
+          - name: Dense
+            units: 8
+            activation: relu
+          - name: OutputLayer
+            units: 1
+            activation: linear
+        report:
+          model_path: models/LSTM.keras
+          metrics_file: reports/metrics.json
+          metrics_loss: reports/loss.png
+          metrics_mse: reports/mean_squared_error.png
+          metrics_mae: reports/mean_absolute_error.png
+          metrics_RootMeanSquaredError: reports/root_mean_squared_error.png
+        training:
+          loss: mse
+          optimizer: Adam
+          learning_rate: 0.01
+          metrics:
+          - mae
+          - mse
+          - RootMeanSquaredError
+          early_stopping:
+            monitor: val_loss
+            patience: 3
+            mode: min
+          model_path: models/model.joblib
+    outs:
+    - path: data/history_df.csv
+      hash: md5
+      md5: 6e8dfb5f4dc00fc6b251b27d5ccc0415
+      size: 260
+    - path: models/LSTM.keras
+      hash: md5
+      md5: 0337a0cde1bd841d314abfb0773c5938
+      size: 238140
