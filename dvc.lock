@@ -118,3 +118,31 @@ stages:
       hash: md5
       md5: 0337a0cde1bd841d314abfb0773c5938
       size: 238140
+  evaluate_stage:
+    cmd: python src/evaluate/evaluate.py --config=params.yaml
+    deps:
+    - path: models/LSTM.keras
+      hash: md5
+      md5: 0337a0cde1bd841d314abfb0773c5938
+      size: 238140
+    - path: src/evaluate/evaluate.py
+      hash: md5
+      md5: 3151b2aa236b7e403bd5f5cba7e5f8f8
+      size: 1762
+    params:
+      params.yaml:
+        output:
+          report_dir: reports
+          model_dir: models
+        report:
+          model_path: models/LSTM.keras
+          metrics_file: reports/metrics.json
+          metrics_loss: reports/loss.png
+          metrics_mse: reports/mean_squared_error.png
+          metrics_mae: reports/mean_absolute_error.png
+          metrics_RootMeanSquaredError: reports/root_mean_squared_error.png
+    outs:
+    - path: reports/metrics.json
+      hash: md5
+      md5: c7db50e7125ab27bae81f1d5ed82dde7
+      size: 105
