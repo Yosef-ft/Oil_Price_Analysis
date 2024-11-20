@@ -34,3 +34,19 @@ Training LSTM model
 ```
 dvc repro
 ```
+
+## Pipeline DAG
+```mermaid
+flowchart TD
+	node1["data_stage"]
+	node2["feature_stage"]
+	node1-->node2
+	node3["evaluate_stage"]
+  
+	node4["report_stage"]
+	node5["train_stage"]
+  node2-->node5
+	node5-->node3
+	node5-->node4
+
+```
