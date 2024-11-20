@@ -1,0 +1,200 @@
+schema: '2.0'
+stages:
+  data_stage:
+    cmd: python src/data/data_stage.py --config=params.yaml
+    deps:
+    - path: src/data/data_stage.py
+      hash: md5
+      md5: ab4b32124d6b39077875a3a40348bd97
+      size: 1781
+    params:
+      params.yaml:
+        base:
+          random_state: 42
+          verbose: 0
+          batch_size: 32
+          epochs: 10
+        data:
+          dataset_csv: data/BrentOilPrices.csv
+          train_split: data/train_data.csv
+          test_split: data/test_data.csv
+          history_df: data/history_df.csv
+          test_size: 60
+          time_steps: 30
+        output:
+          report_dir: reports
+          model_dir: models
+    outs:
+    - path: data/test_data.csv
+      hash: md5
+      md5: 0a9b2b371a67611413e899f842305498
+      size: 1330
+    - path: data/train_data.csv
+      hash: md5
+      md5: 4a7ec7a1d149c71f7f02958d1feaa20b
+      size: 154921
+  feature_stage:
+    cmd: python src/features/featurize.py --config=params.yaml
+    deps:
+    - path: data/test_data.csv
+      hash: md5
+      md5: 0a9b2b371a67611413e899f842305498
+      size: 1330
+    - path: data/train_data.csv
+      hash: md5
+      md5: 4a7ec7a1d149c71f7f02958d1feaa20b
+      size: 154921
+    - path: src/features/featurize.py
+      hash: md5
+      md5: 98928c2bb8978b9934982f74f9610785
+      size: 2168
+    params:
+      params.yaml:
+        data:
+          dataset_csv: data/BrentOilPrices.csv
+          train_split: data/train_data.csv
+          test_split: data/test_data.csv
+          history_df: data/history_df.csv
+          test_size: 60
+          time_steps: 30
+  train_stage:
+    cmd: python src/train/train_model.py --config=params.yaml
+    deps:
+    - path: src/train/train_model.py
+      hash: md5
+      md5: 34b7102c4730322c63e26e8dccc0473f
+      size: 5481
+    params:
+      params.yaml:
+        base:
+          random_state: 42
+          verbose: 0
+          batch_size: 32
+          epochs: 10
+        data:
+          dataset_csv: data/BrentOilPrices.csv
+          train_split: data/train_data.csv
+          test_split: data/test_data.csv
+          history_df: data/history_df.csv
+          test_size: 60
+          time_steps: 30
+        model:
+          layers:
+          - name: InputLayer
+            shape:
+            - 30
+            - 1
+          - name: LSTM
+            units: 64
+            activation: tanh
+            return_sequences: false
+          - name: Dense
+            units: 8
+            activation: relu
+          - name: OutputLayer
+            units: 1
+            activation: linear
+        report:
+          model_path: models/LSTM.keras
+          metrics_file: reports/metrics.json
+          metrics_loss: reports/loss.png
+          metrics_mse: reports/mean_squared_error.png
+          metrics_mae: reports/mean_absolute_error.png
+          metrics_RootMeanSquaredError: reports/root_mean_squared_error.png
+        training:
+          loss: mse
+          optimizer: Adam
+          learning_rate: 0.01
+          metrics:
+          - mae
+          - mse
+          - RootMeanSquaredError
+          early_stopping:
+            monitor: val_loss
+            patience: 3
+            mode: min
+          model_path: models/model.joblib
+    outs:
+    - path: data/history_df.csv
+      hash: md5
+      md5: 16b1ff45d515ec88d39c157e74c76adc
+      size: 1843
+    - path: models/LSTM.keras
+      hash: md5
+      md5: 7e215d2c9ac0878cb581768c4490ca19
+      size: 238140
+  evaluate_stage:
+    cmd: python src/evaluate/evaluate.py --config=params.yaml
+    deps:
+    - path: models/LSTM.keras
+      hash: md5
+      md5: 7e215d2c9ac0878cb581768c4490ca19
+      size: 238140
+    - path: src/evaluate/evaluate.py
+      hash: md5
+      md5: 3151b2aa236b7e403bd5f5cba7e5f8f8
+      size: 1762
+    params:
+      params.yaml:
+        base:
+          random_state: 42
+          verbose: 0
+          batch_size: 32
+          epochs: 10
+        output:
+          report_dir: reports
+          model_dir: models
+        report:
+          model_path: models/LSTM.keras
+          metrics_file: reports/metrics.json
+          metrics_loss: reports/loss.png
+          metrics_mse: reports/mean_squared_error.png
+          metrics_mae: reports/mean_absolute_error.png
+          metrics_RootMeanSquaredError: reports/root_mean_squared_error.png
+    outs:
+    - path: reports/metrics.json
+      hash: md5
+      md5: 8af58e8ff23d4448563b1ea87e136e51
+      size: 104
+  report_stage:
+    cmd: python src/reports/visualize.py --config=params.yaml
+    deps:
+    - path: data/history_df.csv
+      hash: md5
+      md5: 16b1ff45d515ec88d39c157e74c76adc
+      size: 1843
+    - path: src/reports/visualize.py
+      hash: md5
+      md5: ae7f780c4d8776d0049ac518ea573c3d
+      size: 1409
+    params:
+      params.yaml:
+        base:
+          random_state: 42
+          verbose: 0
+          batch_size: 32
+          epochs: 10
+        report:
+          model_path: models/LSTM.keras
+          metrics_file: reports/metrics.json
+          metrics_loss: reports/loss.png
+          metrics_mse: reports/mean_squared_error.png
+          metrics_mae: reports/mean_absolute_error.png
+          metrics_RootMeanSquaredError: reports/root_mean_squared_error.png
+    outs:
+    - path: reports/loss.png
+      hash: md5
+      md5: 43a2f77bff67aeeea969f528d9244a07
+      size: 39178
+    - path: reports/mean_absolute_error.png
+      hash: md5
+      md5: 83940b3798a4a57426a85f8620529340
+      size: 52640
+    - path: reports/mean_squared_error.png
+      hash: md5
+      md5: 2e184c811003ec0460def0294f108c9a
+      size: 38961
+    - path: reports/root_mean_squared_error.png
+      hash: md5
+      md5: 3c1aee2aa5e21f4606f014cb06adbc37
+      size: 45486
