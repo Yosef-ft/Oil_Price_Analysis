@@ -45,6 +45,7 @@ flowchart TD
   
 	node4["report_stage"]
 	node5["train_stage"]
+  node2-->node5
 	node5-->node3
 	node5-->node4
 
