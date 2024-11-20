@@ -117,18 +117,18 @@ stages:
     outs:
     - path: data/history_df.csv
       hash: md5
-      md5: c94f0ae263ecaf66ad67c1041a262197
-      size: 1673
+      md5: 16b1ff45d515ec88d39c157e74c76adc
+      size: 1843
     - path: models/LSTM.keras
       hash: md5
-      md5: a240bdb337ef198be5b8a81cbf934b0d
+      md5: 7e215d2c9ac0878cb581768c4490ca19
       size: 238140
   evaluate_stage:
     cmd: python src/evaluate/evaluate.py --config=params.yaml
     deps:
     - path: models/LSTM.keras
       hash: md5
-      md5: a240bdb337ef198be5b8a81cbf934b0d
+      md5: 7e215d2c9ac0878cb581768c4490ca19
       size: 238140
     - path: src/evaluate/evaluate.py
       hash: md5
@@ -154,15 +154,15 @@ stages:
     outs:
     - path: reports/metrics.json
       hash: md5
-      md5: 152d3e1568a159d92a877997c900f08b
+      md5: 8af58e8ff23d4448563b1ea87e136e51
       size: 104
   report_stage:
     cmd: python src/reports/visualize.py --config=params.yaml
     deps:
     - path: data/history_df.csv
       hash: md5
-      md5: c94f0ae263ecaf66ad67c1041a262197
-      size: 1673
+      md5: 16b1ff45d515ec88d39c157e74c76adc
+      size: 1843
     - path: src/reports/visualize.py
       hash: md5
       md5: ae7f780c4d8776d0049ac518ea573c3d
@@ -184,17 +184,17 @@ stages:
     outs:
     - path: reports/loss.png
       hash: md5
-      md5: 2e89893a9efc4e3864dc889df3e10504
-      size: 43013
+      md5: 43a2f77bff67aeeea969f528d9244a07
+      size: 39178
     - path: reports/mean_absolute_error.png
       hash: md5
-      md5: 7d89dff0ec748873da35a30fce9d5a62
-      size: 39337
+      md5: 83940b3798a4a57426a85f8620529340
+      size: 52640
     - path: reports/mean_squared_error.png
       hash: md5
-      md5: 9c18a9554b6d29406333b7c30d4a6aa8
-      size: 42813
+      md5: 2e184c811003ec0460def0294f108c9a
+      size: 38961
     - path: reports/root_mean_squared_error.png
       hash: md5
-      md5: 17d8663ad1ca6c47c8daaab0176fb9a8
-      size: 49799
+      md5: 3c1aee2aa5e21f4606f014cb06adbc37
+      size: 45486
